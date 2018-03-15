@@ -61,7 +61,7 @@ class Board extends React.Component
     render()
     {
         return (
-            this.renderBoard(3, 3)
+            this.renderBoard(this.props.numRows, this.props.numCols)
         );
     }
 }
@@ -161,6 +161,8 @@ class Game extends React.Component
                 <div className="game-box">
                     <div className="game-board">
                         <Board
+                            numRows={3}
+                            numCols={3}
                             squares={current.squares}
                             onClick={(i) => this.handleClick(i)}
                         />
