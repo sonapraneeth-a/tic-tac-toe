@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './styles/css/index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 const pointer = { cursor: "pointer" };
@@ -122,11 +122,10 @@ class Game extends React.Component
         return (
             <div className="game">
                 <div className="game-board">
-                <Board
-                    squares={current.squares}
-                    onClick={(i) => this.handleClick(i)}
-                />
-
+                    <Board
+                        squares={current.squares}
+                        onClick={(i) => this.handleClick(i)}
+                    />
                 </div>
                 <div className="game-info">
                 <div>{status}</div>
