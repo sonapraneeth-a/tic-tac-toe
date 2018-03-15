@@ -107,6 +107,7 @@ class Game extends React.Component
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
+        const board_fill = isBoardFilled(history[history.length - 1]);
 
         const moves = history.map((step, move) =>
         {
@@ -124,6 +125,10 @@ class Game extends React.Component
         if (winner)
         {
             status = 'Winner: ' + winner;
+        }
+        else if(board_fill === true)
+        {
+            status = 'Game draw';
         }
         else
         {
@@ -177,6 +182,18 @@ function calculateWinner(squares)
         }
     }
     return null;
+}
+
+function isBoardFilled(history)
+{
+    for(var index = 0; index < history.squares.length; index++)
+    {
+        if(history.squares[index] == null)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 registerServiceWorker();
