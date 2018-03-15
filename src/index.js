@@ -10,9 +10,9 @@ class Square extends React.Component
     render()
     {
         return (
-            <button style={pointer} className="square" onClick={() => this.props.onClick()}>
+            <p style={pointer} className="square" onClick={() => this.props.onClick()}>
                 {this.props.value}
-            </button>
+            </p>
         );
     }
 }
@@ -57,7 +57,7 @@ class Game extends React.Component
         super(props);
         this.state = {
             history: [{
-                squares: Array(9).fill(null),
+                squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -76,7 +76,7 @@ class Game extends React.Component
     {
         this.setState({
             history: [{
-                squares: Array(9).fill(null),
+                squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -114,7 +114,7 @@ class Game extends React.Component
               'Go to move #' + move :
               'Go to game start';
             return (
-                <li>
+                <li key={"step" + move}>
                     <p style={pointer} onClick={() => this.jumpTo(move)}>{desc}</p>
                 </li>
             );
