@@ -72,6 +72,17 @@ class Game extends React.Component
         });
     }
 
+    resetGame()
+    {
+        this.setState({
+            history: [{
+                squares: Array(9).fill(null),
+            }],
+            stepNumber: 0,
+            xIsNext: true,
+        });
+    }
+
     handleClick(i)
     {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -130,8 +141,9 @@ class Game extends React.Component
                         />
                     </div>
                     <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+                        <div className="game-reset" onClick={() => this.resetGame()}>Reset Game</div>
+                        <div>{status}</div>
+                        <ol>{moves}</ol>
                     </div>
                 </div>
             </div>
