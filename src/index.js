@@ -60,6 +60,7 @@ class Game extends React.Component
                 squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
             }],
             stepNumber: 0,
+            numSquaresFilled: 0,
             xIsNext: true,
         };
     }
@@ -67,6 +68,7 @@ class Game extends React.Component
     jumpTo(step)
     {
         this.setState({
+            numSquaresFilled: step,
             stepNumber: step,
             xIsNext: (step % 2) === 0,
         });
@@ -79,6 +81,7 @@ class Game extends React.Component
                 squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
             }],
             stepNumber: 0,
+            numSquaresFilled: 0,
             xIsNext: true,
         });
     }
@@ -98,6 +101,7 @@ class Game extends React.Component
                 squares: squares,
             }]),
             xIsNext: !this.state.xIsNext,
+            numSquaresFilled: this.state.numSquaresFilled + 1,
             stepNumber: history.length,
         });
     }
@@ -107,7 +111,7 @@ class Game extends React.Component
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
-        const board_fill = isBoardFilled(history[history.length - 1]);
+        const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);
 
         const moves = history.map((step, move) =>
         {
@@ -184,16 +188,13 @@ function calculateWinner(squares)
     return null;
 }
 
-function isBoardFilled(history)
+function isBoardFilled(numSquaresFilled, totalSquares)
 {
-    for(var index = 0; index < history.squares.length; index++)
+    if(numSquaresFilled === totalSquares)
     {
-        if(history.squares[index] == null)
-        {
-            return false;
-        }
+        return true;
     }
-    return true;
+    return false;
 }
 
 registerServiceWorker();
