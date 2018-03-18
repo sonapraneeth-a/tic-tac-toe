@@ -45,6 +45,7 @@ class Game extends React.Component
             numSquaresFilled: 0,
             xIsNext: true,
         });
+        console.log("Reset: " + this.state.history[0].squares.length);
     }
 
     handleClick(i)
@@ -74,11 +75,13 @@ class Game extends React.Component
         this.config.numRows = numRows;
         this.config.numCols = numCols;
         this.forceUpdate();
+        this.resetGame();
     }
 
     render()
     {
         const history = this.state.history;
+        console.log("Render: " + this.state.history[0].squares.length);
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares, this.config);
         const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);

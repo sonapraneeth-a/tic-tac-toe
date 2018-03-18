@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+/* https://codepen.io/PiotrBerebecki/pen/dpRdKP?editors=0010 */
 class GameForm extends React.Component
 {
     constructor(props)
