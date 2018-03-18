@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/css/index.css';
 
 const pointer = { cursor: "pointer" };
 

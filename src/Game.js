@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/css/index.css';
 import Board from './Board';
 import GameForm from './GameForm';
 import GameInfo from './GameInfo';
