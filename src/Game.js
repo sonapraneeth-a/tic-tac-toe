@@ -6,6 +6,11 @@ import GameInfo from './GameInfo';
 
 const pointer = { cursor: "pointer" };
 
+const version = {
+    fontSize: '1rem',
+    paddingLeft: '1rem'
+}
+
 class Game extends React.Component
 {
     constructor(props)
@@ -125,7 +130,10 @@ class Game extends React.Component
 
         return (
             <div className="game">
-                <div className="game-title">Tic Tac Toe</div>
+                <div className="game-title">
+                    <span>{this.props.title}</span>
+                    <span style={version}>{this.props.version}</span>
+                </div>
                 <div className="game-box">
                     <div className="game-board">
                         <Board
