@@ -25,8 +25,8 @@ class GameForm extends React.Component
 
     handleSubmit(event)
     {
-        console.log('(Child) Number of rows in the board: ' + this.state.numRows);
-        console.log('(Child) Number of cols in the board: ' + this.state.numCols);
+        /*console.log('(Child) Number of rows in the board: ' + this.state.numRows);
+        console.log('(Child) Number of cols in the board: ' + this.state.numCols);*/
         event.preventDefault();
         this.props.handleFromGame(this.state.numRows, this.state.numCols);
     }
@@ -34,15 +34,19 @@ class GameForm extends React.Component
     render()
     {
         return (
-            <div className="game-form">
-                <form onSubmit={this.handleSubmit}>
+            <div className="game-controls">
+                <form onSubmit={this.handleSubmit} className="game-form">
                     <input type="number" value={this.state.numRows} 
                             min="3" max="5"
+                            className="game-form-item"
                             placeholder="Number of rows..." onChange={this.handleRows} />
                     <input type="number" value={this.state.numCols}
                             min="3" max="5"
+                            className="game-form-item"
                             placeholder="Number of cols..." onChange={this.handleCols} />
-                    <input type="submit" value="Submit" />
+                    <input type="submit" 
+                            className="game-form-item"
+                            value="Submit" />
                 </form>
             </div>
         );
