@@ -165,6 +165,16 @@ class Game extends React.Component
 
 function calculateWinner(squares, config)
 {
+    return GeneralBoardNaiveVersion(squares, config);
+}
+
+function GeneralBoardOptimizedVersion(squares, config)
+{
+
+}
+
+function GeneralBoardNaiveVersion(squares, config)
+{
     const numRows = parseInt(config.numRows, 10);
     const numCols = parseInt(config.numCols, 10);
     var winnerFound = true;
@@ -256,7 +266,11 @@ function calculateWinner(squares, config)
             return [null, null];
         }
     }
-    /*const lines = [
+}
+
+function ThreeSquareVersion(squares)
+{
+    const lines = [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7, 8],
@@ -274,7 +288,7 @@ function calculateWinner(squares, config)
             return squares[a];
         }
     }
-    return null;*/
+    return null;
 }
 
 function isBoardFilled(numSquaresFilled, totalSquares)
