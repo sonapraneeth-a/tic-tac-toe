@@ -7,7 +7,9 @@ class GameInfo extends React.Component
         return (
             <div className="game-info">
                 <div>{this.props.status}</div>
-                <ol>{this.props.moves}</ol>
+                <div>
+                    {this.props.moves}
+                </div>
             </div>
         );
     }

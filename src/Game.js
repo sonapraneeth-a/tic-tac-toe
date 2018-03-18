@@ -90,9 +90,7 @@ class Game extends React.Component
               'Go to move #' + move :
               'Go to game start';
             return (
-                <li key={"step" + move}>
-                    <p style={pointer} onClick={() => this.jumpTo(move)}>{desc}</p>
-                </li>
+                <p key={"step" + move} style={pointer} onClick={() => this.jumpTo(move)}>{desc}</p>
             );
         });
 
