@@ -1,5 +1,7 @@
 import React from 'react';
 import Board from './Board';
+import GameForm from './GameForm';
+import GameInfo from './GameInfo';
 
 const pointer = { cursor: "pointer" };
 
@@ -8,13 +10,15 @@ class Game extends React.Component
     constructor(props)
     {
         super(props);
+        this.handleData = this.handleData.bind(this);
         this.config = {
             numRows: 3,
             numCols: 3
         };
         this.state = {
             history: [{
-                squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
+                squares: Array(this.config.numRows*this.config.numCols).fill(null), 
+                /* Causes a problem in IE as fill is not implemented there */
             }],
             stepNumber: 0,
             numSquaresFilled: 0,
@@ -35,7 +39,7 @@ class Game extends React.Component
     {
         this.setState({
             history: [{
-                squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
+                squares: Array(this.config.numRows*this.config.numCols).fill(null), /* Causes a problem in IE as fill is not implemented there */
             }],
             stepNumber: 0,
             numSquaresFilled: 0,
@@ -61,6 +65,15 @@ class Game extends React.Component
             numSquaresFilled: this.state.numSquaresFilled + 1,
             stepNumber: history.length,
         });
+    }
+
+    handleData(numRows, numCols)
+    {
+        console.log('(Parent) Rows: ' + numRows);
+        console.log('(Parent) Cols: ' + numCols);
+        this.config.numRows = numRows;
+        this.config.numCols = numCols;
+        this.forceUpdate();
     }
 
     render()
@@ -107,12 +120,13 @@ class Game extends React.Component
                             squares={current.squares}
                             onClick={(i) => this.handleClick(i)}
                         />
-                    </div>
-                    <div className="game-info">
+                        <GameForm handleFromGame={this.handleData}/>
                         <div className="game-reset" onClick={() => this.resetGame()}>Reset Game</div>
-                        <div>{status}</div>
-                        <ol>{moves}</ol>
                     </div>
+                    <GameInfo 
+                        status={status}
+                        moves={moves}
+                    />
                 </div>
             </div>
         );
