@@ -8,7 +8,7 @@ import Game from './Game';
 ReactDOM.render (
     <Game
         title="Tic Tac Toe"
-        version="0.5.0"
+        version="0.6.0"
     />,
     document.getElementById('app')
 );
