@@ -10,7 +10,7 @@ class Square extends React.Component
         if(this.props.highlight === true)
         {
             return (
-                <p style={pointer} className="square highlight" onClick={() => this.props.onClick()}>
+                <p style={pointer} className="square square-highlight" onClick={() => this.props.onClick()}>
                     {this.props.value}
                 </p>
             );
