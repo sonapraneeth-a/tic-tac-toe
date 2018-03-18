@@ -13,9 +13,11 @@ class Board extends React.Component
 
     renderBoardRow(rowNum, numCols)
     {
-        var rowIndex = rowNum * numCols;
+        var rowIndex = parseInt(rowNum, 10) * parseInt(numCols, 10);
+        /* By default the variables are string and not numbers */
+        var totalCols = parseInt(rowIndex, 10)+parseInt(numCols, 10);
         var cols = [];
-        for (var index = rowIndex; index < rowIndex + numCols; index++)
+        for (var index = rowIndex; index < totalCols; index++)
         {
             // note: we add a key prop here to allow react to uniquely identify each
             // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
