@@ -20,6 +20,9 @@ class Game extends React.Component
                 squares: Array(this.config.numRows*this.config.numCols).fill(null), 
                 /* Causes a problem in IE as fill is not implemented there */
             }],
+            statusHistory: [{
+                message: "Game start",
+            }],
             stepNumber: 0,
             numSquaresFilled: 0,
             xIsNext: true,
@@ -32,6 +35,8 @@ class Game extends React.Component
             numSquaresFilled: step,
             stepNumber: step,
             xIsNext: (step % 2) === 0,
+            history: this.state.history.slice(0, step + 1),
+            statusHistory: this.state.statusHistory.slice(0, step + 1),
         });
     }
 
@@ -40,6 +45,9 @@ class Game extends React.Component
         this.setState({
             history: [{
                 squares: Array(this.config.numRows*this.config.numCols).fill(null), /* Causes a problem in IE as fill is not implemented there */
+            }],
+            statusHistory: [{
+                message: "Game start",
             }],
             stepNumber: 0,
             numSquaresFilled: 0,
@@ -50,8 +58,11 @@ class Game extends React.Component
     handleClick(i)
     {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const statusHistory = this.state.statusHistory.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
+        const currentClickCol = Math.floor(parseInt(i, 10)%parseInt(this.config.numCols, 10) + 1);
+        const currentClickRow = Math.floor(parseInt(i, 10)/parseInt(this.config.numCols, 10) + 1);
         if (calculateWinner(squares, this.config) || squares[i])
         {
             return;
@@ -60,6 +71,10 @@ class Game extends React.Component
         this.setState({
             history: history.concat([{
                 squares: squares,
+            }]),
+            statusHistory: statusHistory.concat([{
+                message: "Move " + parseInt(this.state.stepNumber + 1, 10) + ": Placed " + 
+                            squares[i] + " at (" + currentClickRow + ", " + currentClickCol + ")",
             }]),
             xIsNext: !this.state.xIsNext,
             numSquaresFilled: this.state.numSquaresFilled + 1,
@@ -80,15 +95,14 @@ class Game extends React.Component
     render()
     {
         const history = this.state.history;
+        const statusHistory = this.state.statusHistory;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares, this.config);
         const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);
 
         const moves = history.map((step, move) =>
         {
-            const desc = move ?
-              'Go to move #' + move :
-              'Go to game start';
+            const desc = statusHistory[move].message;
             return (
                 <p key={"step" + move} style={pointer} onClick={() => this.jumpTo(move)}>{desc}</p>
             );
