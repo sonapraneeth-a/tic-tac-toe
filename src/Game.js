@@ -69,7 +69,9 @@ class Game extends React.Component
         const squares = current.squares.slice();
         const currentClickCol = Math.floor(parseInt(i, 10)%parseInt(this.config.numCols, 10) + 1);
         const currentClickRow = Math.floor(parseInt(i, 10)/parseInt(this.config.numCols, 10) + 1);
-        if (calculateWinner(squares, this.config) || squares[i])
+        const winnerInfo = calculateWinner(squares, this.config);
+        const winner = winnerInfo[0];
+        if (winner || squares[i])
         {
             return;
         }
@@ -103,7 +105,9 @@ class Game extends React.Component
         const history = this.state.history;
         const statusHistory = this.state.statusHistory;
         const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares, this.config);
+        const winnerInfo = calculateWinner(current.squares, this.config);
+        const winner = winnerInfo[0];
+        const winnerConfig = winnerInfo[1];
         const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);
 
         const moves = history.map((step, move) =>
@@ -140,6 +144,7 @@ class Game extends React.Component
                             numRows={this.config.numRows}
                             numCols={this.config.numCols}
                             squares={current.squares}
+                            winConfig={winnerConfig}
                             onClick={(i) => this.handleClick(i)}
                         />
                         <GameForm 
@@ -175,7 +180,13 @@ function calculateWinner(squares, config)
         }
         if(winnerFound === true && squares[rowIndex*numCols] !== null)
         {
-            return squares[rowIndex*numCols];
+            let winConfig = [];
+            winConfig.push(rowIndex*numCols);
+            for(let colIndex = 1; colIndex < numCols; colIndex++)
+            { winConfig.push((rowIndex*numCols) + colIndex); }
+            console.log(winConfig);
+            return [squares[rowIndex*numCols], winConfig];
+            //return squares[rowIndex*numCols];
         }
     }
     for(let colIndex = 0; colIndex < numCols; colIndex++)
@@ -190,7 +201,12 @@ function calculateWinner(squares, config)
         }
         if(winnerFound === true && squares[colIndex] !== null)
         {
-            return squares[colIndex];
+            let winConfig = [];
+            winConfig.push(colIndex);
+            for(let rowIndex = 1; rowIndex < numRows; rowIndex++)
+            { winConfig.push(colIndex + (rowIndex*numRows)); }
+            return [squares[colIndex], winConfig];
+            //return squares[colIndex];
         }
     }
     if(numRows === numCols)
@@ -207,7 +223,13 @@ function calculateWinner(squares, config)
         }
         if(winnerFound === true && squares[0] !== null)
         {
-            return squares[0];
+            index = 0;
+            let winConfig = [];
+            winConfig.push(0);
+            while(index < (numCols*numCols-numCols))
+            { winConfig.push(index+numCols+1); index = index+numCols+1; }
+            return [squares[0], winConfig];
+            //return squares[0];
         }
         winnerFound = true;
         index = numCols - 1;
@@ -221,11 +243,17 @@ function calculateWinner(squares, config)
         }
         if(winnerFound === true && squares[numCols-1])
         {
-            return squares[numCols - 1];
+            index = 0;
+            let winConfig = [];
+            winConfig.push(numCols-1);
+            while(index < (numCols*numCols-numCols))
+            { winConfig.push(index+numCols-1); index = index+numCols-1; }
+            return [squares[numCols - 1], winConfig];
+            //return squares[numCols-1];
         }
         else
         {
-            return null;
+            return [null, null];
         }
     }
     /*const lines = [

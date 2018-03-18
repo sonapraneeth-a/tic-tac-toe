@@ -6,10 +6,28 @@ class Board extends React.Component
 {
     renderSquare(i)
     {
-        return <Square 
-                key={"square" + i}
-                value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}/>;
+        if(this.props.winConfig !== null && this.props.winConfig.indexOf(i) !== -1)
+        {
+            return <Square 
+                    key={"square" + i}
+                    value={this.props.squares[i]}
+                    highlight={true}
+                    onClick={() => this.props.onClick(i)}/>;
+        }
+        else
+        {
+            return <Square 
+                    key={"square" + i}
+                    value={this.props.squares[i]}
+                    highlight={false}
+                    onClick={() => this.props.onClick(i)}/>;
+        }
+    }
+
+    test(i)
+    {
+        if(this.props.winConfig !== null && this.props.winConfig.indexOf(i) !== -1)
+        {console.log("Highlight");}
     }
 
     renderBoardRow(rowNum, numCols)
