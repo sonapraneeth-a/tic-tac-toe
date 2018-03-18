@@ -45,7 +45,6 @@ class Game extends React.Component
             numSquaresFilled: 0,
             xIsNext: true,
         });
-        console.log("Reset: " + this.state.history[0].squares.length);
     }
 
     handleClick(i)
@@ -70,18 +69,17 @@ class Game extends React.Component
 
     handleData(numRows, numCols)
     {
-        console.log('(Parent) Rows: ' + numRows);
-        console.log('(Parent) Cols: ' + numCols);
+        /*console.log('(Parent) Rows: ' + numRows);
+        console.log('(Parent) Cols: ' + numCols);*/
         this.config.numRows = numRows;
         this.config.numCols = numCols;
-        this.forceUpdate();
+        /*this.forceUpdate();*/
         this.resetGame();
     }
 
     render()
     {
         const history = this.state.history;
-        console.log("Render: " + this.state.history[0].squares.length);
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares, this.config);
         const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);
@@ -123,7 +121,9 @@ class Game extends React.Component
                             squares={current.squares}
                             onClick={(i) => this.handleClick(i)}
                         />
-                        <GameForm handleFromGame={this.handleData}/>
+                        <GameForm 
+                            handleFromGame={this.handleData}
+                        />
                         <div className="game-reset" onClick={() => this.resetGame()}>Reset Game</div>
                     </div>
                     <GameInfo 
@@ -139,8 +139,8 @@ class Game extends React.Component
 
 function calculateWinner(squares, config)
 {
-    const numRows = config.numRows;
-    const numCols = config.numCols;
+    const numRows = parseInt(config.numRows, 10);
+    const numCols = parseInt(config.numCols, 10);
     var winnerFound = true;
     for(let rowIndex = 0; rowIndex < numRows; rowIndex++)
     {
