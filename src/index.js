@@ -71,6 +71,10 @@ class Game extends React.Component
     constructor(props)
     {
         super(props);
+        this.config = {
+            numRows: 3,
+            numCols: 3
+        };
         this.state = {
             history: [{
                 squares: Array(9).fill(null), /* Causes a problem in IE as fill is not implemented there */
@@ -107,7 +111,7 @@ class Game extends React.Component
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
-        if (calculateWinner(squares) || squares[i])
+        if (calculateWinner(squares, this.config) || squares[i])
         {
             return;
         }
@@ -126,7 +130,7 @@ class Game extends React.Component
     {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares);
+        const winner = calculateWinner(current.squares, this.config);
         const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);
 
         const moves = history.map((step, move) =>
@@ -161,8 +165,8 @@ class Game extends React.Component
                 <div className="game-box">
                     <div className="game-board">
                         <Board
-                            numRows={3}
-                            numCols={3}
+                            numRows={this.config.numRows}
+                            numCols={this.config.numCols}
                             squares={current.squares}
                             onClick={(i) => this.handleClick(i)}
                         />
@@ -183,9 +187,77 @@ ReactDOM.render (
     document.getElementById('app')
 );
 
-function calculateWinner(squares)
+function calculateWinner(squares, config)
 {
-    const lines = [
+    const numRows = config.numRows;
+    const numCols = config.numCols;
+    var winnerFound = true;
+    for(let rowIndex = 0; rowIndex < numRows; rowIndex++)
+    {
+        winnerFound = true;
+        for(let colIndex = 1; colIndex < numCols; colIndex++)
+        {
+            if(squares[rowIndex*numCols] !== squares[(rowIndex*numCols) + colIndex])
+            {
+                winnerFound = false; break;
+            }
+        }
+        if(winnerFound === true && squares[rowIndex*numCols] !== null)
+        {
+            return squares[rowIndex*numCols];
+        }
+    }
+    for(let colIndex = 0; colIndex < numCols; colIndex++)
+    {
+        winnerFound = true;
+        for(let rowIndex = 1; rowIndex < numRows; rowIndex++)
+        {
+            if(squares[colIndex] !== squares[colIndex + (rowIndex*numRows)])
+            {
+                winnerFound = false; break;
+            }
+        }
+        if(winnerFound === true && squares[colIndex] !== null)
+        {
+            return squares[colIndex];
+        }
+    }
+    if(numRows === numCols)
+    {
+        let index = 0;
+        winnerFound = true;
+        while(index < (numCols*numCols-numCols))
+        {
+            if(squares[0] !== squares[index+numCols+1])
+            {
+                winnerFound = false; break;
+            }
+            index = index + numCols + 1;
+        }
+        if(winnerFound === true && squares[0] !== null)
+        {
+            return squares[0];
+        }
+        winnerFound = true;
+        index = numCols - 1;
+        while(index < (numCols*numCols-numCols))
+        {
+            if(squares[numCols - 1] !== squares[index+numCols-1])
+            {
+                winnerFound = false; break;
+            }
+            index = index + numCols - 1;
+        }
+        if(winnerFound === true && squares[numCols-1])
+        {
+            return squares[numCols - 1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    /*const lines = [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7, 8],
@@ -203,7 +275,7 @@ function calculateWinner(squares)
             return squares[a];
         }
     }
-    return null;
+    return null;*/
 }
 
 function isBoardFilled(numSquaresFilled, totalSquares)
