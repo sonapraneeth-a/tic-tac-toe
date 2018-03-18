@@ -1,0 +1,95 @@
+.game
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.game-title
+{
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem 0;
+    @include until($tablet)
+    {
+        font-size: 1.5rem;
+    }
+    @include from($tablet)
+    {
+        font-size: 2rem;
+    }
+}
+
+.game-box
+{
+    justify-content: center;
+    display: flex;
+    margin-bottom: 4rem;
+    @include until($mobile)
+    {
+        flex-direction: column;
+    }
+    @include from($mobile)
+    {
+        flex-direction: row;
+    }
+}
+
+.game-board
+{
+    display: flex;
+    flex-grow: 3;
+    flex-direction: column;
+    justify-content: center;
+    @if $mode == debug
+    {
+        border: 0.05px solid black;
+    }
+    padding: 1rem;
+}
+
+.game-form
+{
+    display: flex;
+    margin: 1rem;
+    @include until($mobile)
+    {
+        flex-direction: column;
+    }
+    @include from($mobile)
+    {
+        flex-direction: row;
+    }
+    .game-form-item
+    {
+        flex: 1;
+        margin: 0 1rem;
+    }
+}
+
+.game-reset
+{
+    padding: 0.05rem;
+    text-align: center;
+    margin: 1rem;
+    border: 0.05rem solid black;
+    cursor: pointer;
+}
+
+.game-info
+{
+    flex-grow: 1;
+    text-align: left;
+    @include until($mobile)
+    {
+        margin-top: 1rem;
+    }
+    @include from($mobile)
+    {
+        margin-left: 1rem;
+    }
+    @if $mode == debug
+    {
+        border: 0.05px solid black;
+    }
+    padding: 1rem;
+}
