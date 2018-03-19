@@ -40,7 +40,7 @@ export function GeneralBoardNaiveAlgo(squares, config, config_required)
         winnerFound = true;
         for(let rowIndex = 1; rowIndex < num_rows; rowIndex++)
         {
-            if(squares[colIndex] !== squares[colIndex + (rowIndex*num_rows)])
+            if(squares[colIndex] !== squares[colIndex + (rowIndex*num_cols)])
             {
                 winnerFound = false; break;
             }
@@ -52,7 +52,7 @@ export function GeneralBoardNaiveAlgo(squares, config, config_required)
                 let win_config = [];
                 win_config.push(colIndex);
                 for(let rowIndex = 1; rowIndex < num_rows; rowIndex++)
-                { win_config.push(colIndex + (rowIndex*num_rows)); }
+                { win_config.push(colIndex + (rowIndex*num_cols)); }
                 /*t1 = performance.now();
                 console.log("Call to GeneralBoardNaiveAlgo took " + (t1 - t0) + " milliseconds.")*/
                 return [squares[colIndex], win_config];
