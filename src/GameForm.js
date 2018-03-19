@@ -11,6 +11,7 @@ class GameForm extends React.Component
         this.handleRows = this.handleRows.bind(this);
         this.handleCols = this.handleCols.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleReset = this.handleReset.bind(this);
     }
 
     handleRows(event)
@@ -31,6 +32,13 @@ class GameForm extends React.Component
         this.props.handleFromGame(this.state.num_rows, this.state.num_cols);
     }
 
+    handleReset(event)
+    {
+        event.preventDefault();
+        console.log("Reset event");
+        this.props.handleForReset();
+    }
+
     render()
     {
         return (
@@ -48,6 +56,7 @@ class GameForm extends React.Component
                             className="game-form-item"
                             value="Submit" />
                 </form>
+                <div className="game-reset" onClick={this.handleReset}>Reset Game</div>
             </div>
         );
     }

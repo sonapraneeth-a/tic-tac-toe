@@ -19,6 +19,7 @@ class Game extends React.Component
     {
         super(props);
         this.handleData = this.handleData.bind(this);
+        this.handleReset = this.handleReset.bind(this);
         this.config = {
             num_rows: 3,
             num_cols: 3
@@ -127,6 +128,12 @@ class Game extends React.Component
         this.resetGame();
     }
 
+    handleReset()
+    {
+        console.log("Handle reset");
+        this.resetGame();
+    }
+
     render()
     {
         const board_history = this.state.board_history;
@@ -176,8 +183,13 @@ class Game extends React.Component
                         />
                         <GameForm 
                             handleFromGame={this.handleData}
+                            handleForReset={this.handleReset}
                         />
-                        <div className="game-reset" onClick={() => this.resetGame()}>Reset Game</div>
+                        <div className="game-players">
+                            <div style={pointer}>Human</div>
+                            <div>AI</div>
+                        </div>
+                        
                     </div>
                     <GameInfo 
                         status={status}
