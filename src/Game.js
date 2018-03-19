@@ -1,14 +1,16 @@
-import React from 'react';
-import './styles/css/index.css';
-import Board from './Board';
-import GameForm from './GameForm';
-import GameInfo from './GameInfo';
+import React from "react";
+import "./styles/css/index.css";
+import Board from "./Board";
+import GameForm from "./GameForm";
+import GameInfo from "./GameInfo";
+import {GeneralBoardNaiveAlgo} from "./GeneralizedNaiveAlgo";
+// import {GeneralBoardOptimizedAlgo} from "./GeneralizedOptimalAlgo";
 
 const pointer = { cursor: "pointer" };
 
 const version = {
-    fontSize: '1rem',
-    paddingLeft: '1rem'
+    fontSize: "1rem",
+    paddingLeft: "1rem"
 }
 
 class Game extends React.Component
@@ -18,101 +20,126 @@ class Game extends React.Component
         super(props);
         this.handleData = this.handleData.bind(this);
         this.config = {
-            numRows: 3,
-            numCols: 3
+            num_rows: 3,
+            num_cols: 3
         };
+        const length_of_aux_array = parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2;
         this.state = {
-            history: [{
-                squares: Array(this.config.numRows*this.config.numCols).fill(null), 
+            board_history: [{
+                squares: Array(this.config.num_rows*this.config.num_cols).fill(null), 
                 /* Causes a problem in IE as fill is not implemented there */
             }],
-            statusHistory: [{
+            aux_history: [{
+                win: Array(length_of_aux_array).fill("UD"), 
+                count: Array(length_of_aux_array).fill(0), 
+                current_winner: "UD",
+                /* Causes a problem in IE as fill is not implemented there */
+            }],
+            status_history: [{
                 message: "Game start",
             }],
-            stepNumber: 0,
-            numSquaresFilled: 0,
-            xIsNext: true,
+            step_number: 0,
+            num_squares_filled: 0,
+            x_is_next: true,
         };
     }
 
     jumpTo(step)
     {
         this.setState({
-            numSquaresFilled: step,
-            stepNumber: step,
-            xIsNext: (step % 2) === 0,
-            history: this.state.history.slice(0, step + 1),
-            statusHistory: this.state.statusHistory.slice(0, step + 1),
+            num_squares_filled: step,
+            step_number: step,
+            x_is_next: (step % 2) === 0,
+            board_history: this.state.board_history.slice(0, step + 1),
+            status_history: this.state.status_history.slice(0, step + 1),
+            aux_history: this.state.aux_history.slice(0, step + 1),
         });
     }
 
     resetGame()
     {
         this.setState({
-            history: [{
-                squares: Array(this.config.numRows*this.config.numCols).fill(null), /* Causes a problem in IE as fill is not implemented there */
+            board_history: [{
+                squares: Array(this.config.num_rows*this.config.num_cols).fill(null),
+                /* Causes a problem in IE as fill is not implemented there */
             }],
-            statusHistory: [{
+            aux_history: [{
+                win: Array(parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2).fill("UD"), 
+                count: Array(parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2).fill(0), 
+                current_winner: "UD",
+                /* Causes a problem in IE as fill is not implemented there */
+            }],
+            status_history: [{
                 message: "Game start",
             }],
-            stepNumber: 0,
-            numSquaresFilled: 0,
-            xIsNext: true,
+            step_number: 0,
+            num_squares_filled: 0,
+            x_is_next: true,
         });
     }
 
     handleClick(i)
     {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const statusHistory = this.state.statusHistory.slice(0, this.state.stepNumber + 1);
-        const current = history[history.length - 1];
-        const squares = current.squares.slice();
-        const currentClickCol = Math.floor(parseInt(i, 10)%parseInt(this.config.numCols, 10) + 1);
-        const currentClickRow = Math.floor(parseInt(i, 10)/parseInt(this.config.numCols, 10) + 1);
-        const winnerInfo = calculateWinner(squares, this.config);
-        const winner = winnerInfo[0];
-        if (winner || squares[i])
+        const board_history = this.state.board_history.slice(0, this.state.step_number + 1);
+        const status_history = this.state.status_history.slice(0, this.state.step_number + 1);
+        const aux_history = this.state.aux_history.slice(0, this.state.step_number + 1);
+        const current_board_status = board_history[board_history.length - 1];
+        const current_squares = current_board_status.squares.slice();
+        const aux_current = aux_history[aux_history.length - 1];
+        const aux_win_current = aux_current.win.slice();
+        const aux_count_current = aux_current.count.slice();
+        const current_click_col = Math.floor(parseInt(i, 10)%parseInt(this.config.num_cols, 10) + 1);
+        const current_click_row = Math.floor(parseInt(i, 10)/parseInt(this.config.num_cols, 10) + 1);
+        const winner_info = GeneralBoardNaiveAlgo(current_squares, this.config, "no");
+        const winner = winner_info[0];
+        let current_winner = "UD";
+        if (winner || current_squares[i])
         {
             return;
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        current_squares[i] = this.state.x_is_next ? "X" : "O";
         this.setState({
-            history: history.concat([{
-                squares: squares,
+            board_history: board_history.concat([{
+                squares: current_squares,
             }]),
-            statusHistory: statusHistory.concat([{
-                message: "Move " + parseInt(this.state.stepNumber + 1, 10) + ": Placed " + 
-                            squares[i] + " at (" + currentClickRow + ", " + currentClickCol + ")",
+            status_history: status_history.concat([{
+                message: "Move " + parseInt(this.state.step_number + 1, 10) + ": Placed " + 
+                            current_squares[i] + " at (" + current_click_row + ", " + current_click_col + ")",
             }]),
-            xIsNext: !this.state.xIsNext,
-            numSquaresFilled: this.state.numSquaresFilled + 1,
-            stepNumber: history.length,
+            aux_history: aux_history.concat([{
+                win: aux_win_current,
+                count: aux_count_current,
+                current_winner: current_winner,
+            }]),
+            x_is_next: !this.state.x_is_next,
+            num_squares_filled: this.state.num_squares_filled + 1,
+            step_number: board_history.length,
         });
     }
 
-    handleData(numRows, numCols)
+    handleData(num_rows, num_cols)
     {
-        /*console.log('(Parent) Rows: ' + numRows);
-        console.log('(Parent) Cols: ' + numCols);*/
-        this.config.numRows = numRows;
-        this.config.numCols = numCols;
+        /*console.log("(Parent) Rows: " + num_rows);
+        console.log("(Parent) Cols: " + num_cols);*/
+        this.config.num_rows = num_rows;
+        this.config.num_cols = num_cols;
         /*this.forceUpdate();*/
         this.resetGame();
     }
 
     render()
     {
-        const history = this.state.history;
-        const statusHistory = this.state.statusHistory;
-        const current = history[this.state.stepNumber];
-        const winnerInfo = calculateWinner(current.squares, this.config);
-        const winner = winnerInfo[0];
-        const winnerConfig = winnerInfo[1];
-        const board_fill = isBoardFilled(this.state.numSquaresFilled, history[history.length - 1].squares.length);
-
-        const moves = history.map((step, move) =>
+        const board_history = this.state.board_history;
+        const status_history = this.state.status_history;
+        const current_board = board_history[this.state.step_number];
+        const winner_info = GeneralBoardNaiveAlgo(current_board.squares, this.config, "yes");
+        const winner = winner_info[0];
+        const winner_config = winner_info[1];
+        const is_board_filled = IsBoardFilled(this.state.num_squares_filled, 
+                                                board_history[board_history.length - 1].squares.length);
+        const moves = board_history.map((step, move) =>
         {
-            const desc = statusHistory[move].message;
+            const desc = status_history[move].message;
             return (
                 <p key={"step" + move} style={pointer} onClick={() => this.jumpTo(move)}>{desc}</p>
             );
@@ -121,15 +148,15 @@ class Game extends React.Component
         let status;
         if (winner)
         {
-            status = 'Winner: ' + winner;
+            status = "Winner: " + winner;
         }
-        else if(board_fill === true)
+        else if(is_board_filled === true)
         {
-            status = 'Game draw';
+            status = "Game draw";
         }
         else
         {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            status = "Next player: " + (this.state.x_is_next ? "X" : "O");
         }
 
         return (
@@ -141,10 +168,10 @@ class Game extends React.Component
                 <div className="game-box">
                     <div className="game-board">
                         <Board
-                            numRows={this.config.numRows}
-                            numCols={this.config.numCols}
-                            squares={current.squares}
-                            winConfig={winnerConfig}
+                            num_rows={this.config.num_rows}
+                            num_cols={this.config.num_cols}
+                            squares={current_board.squares}
+                            win_config={winner_config}
                             onClick={(i) => this.handleClick(i)}
                         />
                         <GameForm 
@@ -163,134 +190,9 @@ class Game extends React.Component
 }
 
 
-function calculateWinner(squares, config)
+function IsBoardFilled(num_squares_filled, total_squares)
 {
-    return GeneralBoardNaiveVersion(squares, config);
-}
-
-function GeneralBoardOptimizedVersion(squares, config)
-{
-
-}
-
-function GeneralBoardNaiveVersion(squares, config)
-{
-    const numRows = parseInt(config.numRows, 10);
-    const numCols = parseInt(config.numCols, 10);
-    var winnerFound = true;
-    for(let rowIndex = 0; rowIndex < numRows; rowIndex++)
-    {
-        winnerFound = true;
-        for(let colIndex = 1; colIndex < numCols; colIndex++)
-        {
-            if(squares[rowIndex*numCols] !== squares[(rowIndex*numCols) + colIndex])
-            {
-                winnerFound = false; break;
-            }
-        }
-        if(winnerFound === true && squares[rowIndex*numCols] !== null)
-        {
-            let winConfig = [];
-            winConfig.push(rowIndex*numCols);
-            for(let colIndex = 1; colIndex < numCols; colIndex++)
-            { winConfig.push((rowIndex*numCols) + colIndex); }
-            console.log(winConfig);
-            return [squares[rowIndex*numCols], winConfig];
-            //return squares[rowIndex*numCols];
-        }
-    }
-    for(let colIndex = 0; colIndex < numCols; colIndex++)
-    {
-        winnerFound = true;
-        for(let rowIndex = 1; rowIndex < numRows; rowIndex++)
-        {
-            if(squares[colIndex] !== squares[colIndex + (rowIndex*numRows)])
-            {
-                winnerFound = false; break;
-            }
-        }
-        if(winnerFound === true && squares[colIndex] !== null)
-        {
-            let winConfig = [];
-            winConfig.push(colIndex);
-            for(let rowIndex = 1; rowIndex < numRows; rowIndex++)
-            { winConfig.push(colIndex + (rowIndex*numRows)); }
-            return [squares[colIndex], winConfig];
-            //return squares[colIndex];
-        }
-    }
-    if(numRows === numCols)
-    {
-        let index = 0;
-        winnerFound = true;
-        while(index < (numCols*numCols-numCols))
-        {
-            if(squares[0] !== squares[index+numCols+1])
-            {
-                winnerFound = false; break;
-            }
-            index = index + numCols + 1;
-        }
-        if(winnerFound === true && squares[0] !== null)
-        {
-            index = 0;
-            let winConfig = [];
-            winConfig.push(0);
-            while(index < (numCols*numCols-numCols))
-            { winConfig.push(index+numCols+1); index = index+numCols+1; }
-            return [squares[0], winConfig];
-            //return squares[0];
-        }
-        winnerFound = true;
-        index = numCols - 1;
-        while(index < (numCols*numCols-numCols))
-        {
-            if(squares[numCols - 1] !== squares[index+numCols-1])
-            {
-                winnerFound = false; break;
-            }
-            index = index + numCols - 1;
-        }
-        if(winnerFound === true && squares[numCols-1])
-        {
-            index = 0;
-            let winConfig = [];
-            winConfig.push(numCols-1);
-            while(index < (numCols*numCols-numCols))
-            { winConfig.push(index+numCols-1); index = index+numCols-1; }
-            return [squares[numCols - 1], winConfig];
-            //return squares[numCols-1];
-        }
-    }
-    return [null, null];
-}
-
-function ThreeSquareVersion(squares)
-{
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++)
-    {
-        const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c])
-        {
-            return squares[a];
-        }
-    }
-    return null;
-}
-
-function isBoardFilled(numSquaresFilled, totalSquares)
-{
-    if(numSquaresFilled === totalSquares)
+    if(num_squares_filled === total_squares)
     {
         return true;
     }

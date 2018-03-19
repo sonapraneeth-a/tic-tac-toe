@@ -6,7 +6,7 @@ class Board extends React.Component
 {
     renderSquare(i)
     {
-        if(this.props.winConfig !== null && this.props.winConfig.indexOf(i) !== -1)
+        if(this.props.win_config !== null && this.props.win_config.indexOf(i) !== -1)
         {
             return <Square 
                     key={"square" + i}
@@ -26,15 +26,15 @@ class Board extends React.Component
 
     test(i)
     {
-        if(this.props.winConfig !== null && this.props.winConfig.indexOf(i) !== -1)
+        if(this.props.win_config !== null && this.props.win_config.indexOf(i) !== -1)
         {console.log("Highlight");}
     }
 
-    renderBoardRow(rowNum, numCols)
+    renderBoardRow(rowNum, num_cols)
     {
-        var rowIndex = parseInt(rowNum, 10) * parseInt(numCols, 10);
+        var rowIndex = parseInt(rowNum, 10) * parseInt(num_cols, 10);
         /* By default the variables are string and not numbers */
-        var totalCols = parseInt(rowIndex, 10)+parseInt(numCols, 10);
+        var totalCols = parseInt(rowIndex, 10)+parseInt(num_cols, 10);
         var cols = [];
         for (var index = rowIndex; index < totalCols; index++)
         {
@@ -49,12 +49,12 @@ class Board extends React.Component
         );
     }
 
-    renderBoard(numRows, numCols)
+    renderBoard(num_rows, num_cols)
     {
         var rows = [];
-        for (var index = 0; index < numRows; index++)
+        for (var index = 0; index < num_rows; index++)
         {
-            rows.push(this.renderBoardRow(index, numCols));
+            rows.push(this.renderBoardRow(index, num_cols));
         }
         return (
             <div key={"board"}>
@@ -66,7 +66,7 @@ class Board extends React.Component
     render()
     {
         return (
-            this.renderBoard(this.props.numRows, this.props.numCols)
+            this.renderBoard(this.props.num_rows, this.props.num_cols)
         );
     }
 }
