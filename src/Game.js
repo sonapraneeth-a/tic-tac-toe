@@ -261,11 +261,8 @@ function GeneralBoardNaiveVersion(squares, config)
             return [squares[numCols - 1], winConfig];
             //return squares[numCols-1];
         }
-        else
-        {
-            return [null, null];
-        }
     }
+    return [null, null];
 }
 
 function ThreeSquareVersion(squares)
