@@ -1,6 +1,9 @@
 import React from 'react';
 
 /* https://codepen.io/PiotrBerebecki/pen/dpRdKP?editors=0010 */
+
+const pointer = { cursor: "pointer" };
+
 class GameForm extends React.Component
 {
     constructor(props)
@@ -56,6 +59,10 @@ class GameForm extends React.Component
                             className="game-form-item"
                             value="Submit" />
                 </form>
+                <div className="game-players">
+                    <div style={pointer} className="player-highlight">Human</div>
+                    <div>AI</div>
+                </div>
                 <div className="game-reset" onClick={this.handleReset}>Reset Game</div>
             </div>
         );

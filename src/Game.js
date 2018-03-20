@@ -94,6 +94,7 @@ class Game extends React.Component
         const winner_info = GeneralBoardNaiveAlgo(current_squares, this.config, "no");
         const winner = winner_info[0];
         let current_winner = "UD";
+        // If winner is already declared or the square in the board is unoccupied, do not change the board
         if (winner || current_squares[i])
         {
             return;
@@ -185,11 +186,6 @@ class Game extends React.Component
                             handleFromGame={this.handleData}
                             handleForReset={this.handleReset}
                         />
-                        <div className="game-players">
-                            <div style={pointer}>Human</div>
-                            <div>AI</div>
-                        </div>
-                        
                     </div>
                     <GameInfo 
                         status={status}
