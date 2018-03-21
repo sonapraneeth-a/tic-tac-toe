@@ -27,10 +27,12 @@ class Game extends React.Component
             {
                 name: "human",
                 level: "",
+                choice: "X",
             },
             second_player: {
                 name: "human",
                 level: "",
+                choice: "O",
             }
         };
         const length_of_aux_array = parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2;
@@ -50,7 +52,7 @@ class Game extends React.Component
             }],
             step_number: 0,
             num_squares_filled: 0,
-            x_is_next: true,
+            next_player: "F", /* If next player is true, it is the chance of first player */
         };
     }
 
@@ -59,7 +61,7 @@ class Game extends React.Component
         this.setState({
             num_squares_filled: step,
             step_number: step,
-            x_is_next: (step % 2) === 0,
+            next_player: ((step % 2) === 0)? "F": "S",
             board_history: this.state.board_history.slice(0, step + 1),
             status_history: this.state.status_history.slice(0, step + 1),
             aux_history: this.state.aux_history.slice(0, step + 1),
@@ -84,7 +86,7 @@ class Game extends React.Component
             }],
             step_number: 0,
             num_squares_filled: 0,
-            x_is_next: true,
+            next_player: "F",
         });
     }
 
@@ -108,7 +110,8 @@ class Game extends React.Component
         {
             return;
         }
-        current_squares[i] = this.state.x_is_next ? "X" : "O";
+        current_squares[i] = ((this.state.next_player === "F") ? 
+                                this.config.first_player.choice : this.config.second_player.choice);
         this.setState({
             board_history: board_history.concat([{
                 squares: current_squares,
@@ -122,7 +125,7 @@ class Game extends React.Component
                 count: aux_count_current,
                 current_winner: current_winner,
             }]),
-            x_is_next: !this.state.x_is_next,
+            next_player: (this.state.next_player === "F")?"S":"F",
             num_squares_filled: this.state.num_squares_filled + 1,
             step_number: board_history.length,
         });
@@ -148,6 +151,8 @@ class Game extends React.Component
 
     render()
     {
+        console.log("Render");
+        console.log(this.config);
         const board_history = this.state.board_history;
         const status_history = this.state.status_history;
         const current_board = board_history[this.state.step_number];
@@ -175,7 +180,8 @@ class Game extends React.Component
         }
         else
         {
-            status = "Next player: " + (this.state.x_is_next ? "X" : "O");
+            status = "Next player: " + (this.state.next_player === "F" ? 
+                                        this.config.first_player.choice : this.config.second_player.choice);
         }
 
         return (

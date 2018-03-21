@@ -12,14 +12,17 @@ class GameForm extends React.Component
             num_cols: 3,
             player_one: "human",
             player_two: "human",
+            player_choice: "X",
             first_player: 
             {
                 name: "human",
                 level: "",
+                choice: "X",
             },
             second_player: {
                 name: "human",
                 level: "",
+                choice: "O",
             }
         };
 
@@ -27,6 +30,7 @@ class GameForm extends React.Component
         this.handleCols = this.handleCols.bind(this);
         this.handleFirstPlayer = this.handleFirstPlayer.bind(this);
         this.handleSecondPlayer = this.handleSecondPlayer.bind(this);
+        this.handlePlayerChoice = this.handlePlayerChoice.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
@@ -41,6 +45,25 @@ class GameForm extends React.Component
         this.setState({num_cols: event.target.value});
     }
 
+    handlePlayerChoice(event)
+    {
+        let first_player_choice = (event.target.value === "X")? "X":"O";
+        let second_player_choice = (event.target.value === "X")? "O":"X";
+        this.setState({
+            player_choice: event.target.value,
+            first_player: {
+                name: this.state.first_player.name,
+                level: this.state.first_player.level,
+                choice: first_player_choice,
+            },
+            second_player: {
+                name: this.state.second_player.name,
+                level: this.state.second_player.level,
+                choice: second_player_choice,
+            }
+        });
+    }
+
     handleFirstPlayer(event)
     {
         let tokens = event.target.value.split("-");
@@ -52,6 +75,7 @@ class GameForm extends React.Component
             first_player: {
                 name: name,
                 level: level,
+                choice: this.state.first_player.choice,
             }
         });
     }
@@ -67,6 +91,7 @@ class GameForm extends React.Component
             second_player: {
                 name: name,
                 level: level,
+                choice: this.state.second_player.choice,
             }
         });
     }
@@ -108,6 +133,11 @@ class GameForm extends React.Component
                                 <option value="ai-easy">AI - Easy</option>
                                 <option value="ai-difficult">AI - Difficult</option>
                             </select>
+                            <select value={this.state.player_choice} 
+                                    onChange={this.handlePlayerChoice}>
+                                <option value="X">X</option>
+                                <option value="O">O</option>
+                            </select>
                         </div>
                         <div className="game-form-players">
                             <label> Second Player </label>
@@ -123,7 +153,7 @@ class GameForm extends React.Component
                                 value="Submit" />
                     </div>
                 </form>
-                <div className="game-reset" onClick={this.handleReset}>Reset Game</div>
+                <div className="game-reset" onClick={this.handleReset}>Reset Board</div>
             </div>
         );
     }
