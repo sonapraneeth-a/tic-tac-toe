@@ -89,6 +89,8 @@ class Game extends React.Component
             step_number: 0,
             num_squares_filled: 0,
             next_player: "F",
+            winner: null,
+            win_config: null,
         });
     }
 
