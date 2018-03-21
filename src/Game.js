@@ -53,6 +53,8 @@ class Game extends React.Component
             step_number: 0,
             num_squares_filled: 0,
             next_player: "F", /* If next player is true, it is the chance of first player */
+            winner: null,
+            win_config: null,
         };
     }
 
@@ -102,16 +104,17 @@ class Game extends React.Component
         const aux_count_current = aux_current.count.slice();
         const current_click_col = Math.floor(parseInt(i, 10)%parseInt(this.config.num_cols, 10) + 1);
         const current_click_row = Math.floor(parseInt(i, 10)/parseInt(this.config.num_cols, 10) + 1);
-        const winner_info = GeneralBoardNaiveAlgo(current_squares, this.config, "no");
-        const winner = winner_info[0];
-        let current_winner = "UD";
         // If winner is already declared or the square in the board is unoccupied, do not change the board
-        if (winner || current_squares[i])
+        if (this.state.winner || current_squares[i])
         {
             return;
         }
+        let current_winner = "UD";
         current_squares[i] = ((this.state.next_player === "F") ? 
                                 this.config.first_player.choice : this.config.second_player.choice);
+        const winner_info = GeneralBoardNaiveAlgo(current_squares, this.config, "yes");
+        const winner = winner_info[0];
+        const winner_config = winner_info[1];
         this.setState({
             board_history: board_history.concat([{
                 squares: current_squares,
@@ -128,6 +131,8 @@ class Game extends React.Component
             next_player: (this.state.next_player === "F")?"S":"F",
             num_squares_filled: this.state.num_squares_filled + 1,
             step_number: board_history.length,
+            winner: winner,
+            win_config: winner_config,
         });
     }
 
@@ -151,14 +156,12 @@ class Game extends React.Component
 
     render()
     {
-        console.log("Render");
-        console.log(this.config);
         const board_history = this.state.board_history;
         const status_history = this.state.status_history;
         const current_board = board_history[this.state.step_number];
-        const winner_info = GeneralBoardNaiveAlgo(current_board.squares, this.config, "yes");
-        const winner = winner_info[0];
-        const winner_config = winner_info[1];
+        //const winner_info = GeneralBoardNaiveAlgo(current_board.squares, this.config, "yes");
+        const winner = this.state.winner;//winner_info[0];
+        const winner_config = this.state.win_config;//winner_info[1];
         const is_board_filled = IsBoardFilled(this.state.num_squares_filled, 
                                                 board_history[board_history.length - 1].squares.length);
         const moves = board_history.map((step, move) =>
