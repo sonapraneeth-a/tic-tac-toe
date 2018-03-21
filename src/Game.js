@@ -22,7 +22,16 @@ class Game extends React.Component
         this.handleReset = this.handleReset.bind(this);
         this.config = {
             num_rows: 3,
-            num_cols: 3
+            num_cols: 3,
+            first_player: 
+            {
+                name: "human",
+                level: "",
+            },
+            second_player: {
+                name: "human",
+                level: "",
+            }
         };
         const length_of_aux_array = parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2;
         this.state = {
@@ -119,12 +128,14 @@ class Game extends React.Component
         });
     }
 
-    handleData(num_rows, num_cols)
+    handleData(num_rows, num_cols, first_player, second_player, first_player_level, second_player_level)
     {
         /*console.log("(Parent) Rows: " + num_rows);
         console.log("(Parent) Cols: " + num_cols);*/
         this.config.num_rows = num_rows;
         this.config.num_cols = num_cols;
+        this.config.first_player = first_player;
+        this.config.second_player = second_player;
         /*this.forceUpdate();*/
         this.resetGame();
     }
