@@ -4,7 +4,7 @@ import Board from "./Board";
 import GameForm from "./GameForm";
 import GameInfo from "./GameInfo";
 import {GeneralBoardNaiveAlgo} from "./GeneralizedNaiveAlgo";
-// import {GeneralBoardOptimizedAlgo} from "./GeneralizedOptimalAlgo";
+import {GeneralBoardOptimizedAlgo} from "./GeneralizedOptimalAlgo";
 
 const pointer = { cursor: "pointer" };
 
@@ -33,77 +33,131 @@ class Game extends React.Component
                 name: "human",
                 level: "",
                 choice: "O",
-            }
+            },
+            time_opt: true,
         };
         const length_of_aux_array = parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2;
-        this.state = {
-            board_history: [{
-                squares: Array(this.config.num_rows*this.config.num_cols).fill(null), 
-                /* Causes a problem in IE as fill is not implemented there */
-            }],
-            aux_history: [{
-                win: Array(length_of_aux_array).fill("UD"), 
-                count: Array(length_of_aux_array).fill(0), 
-                current_winner: "UD",
-                /* Causes a problem in IE as fill is not implemented there */
-            }],
-            status_history: [{
-                message: "Game start",
-            }],
-            step_number: 0,
-            num_squares_filled: 0,
-            next_player: "F", /* If next player is true, it is the chance of first player */
-            winner: null,
-            win_config: null,
-        };
+        if(!this.config.time_opt)
+        {
+            this.state = {
+                board_history: [{
+                    squares: Array(this.config.num_rows*this.config.num_cols).fill(null), 
+                    /* Causes a problem in IE as fill is not implemented there */
+                }],
+                status_history: [{
+                    message: "Game start",
+                }],
+                step_number: 0,
+                num_squares_filled: 0,
+                next_player: "F", /* If next player is true, it is the chance of first player */
+                winner: null,
+                win_config: null,
+            };
+        }
+        else
+        {
+            this.state = {
+                board_history: [{
+                    squares: Array(this.config.num_rows*this.config.num_cols).fill(null), 
+                    /* Causes a problem in IE as fill is not implemented there */
+                }],
+                aux_history: [{
+                    win: Array(length_of_aux_array).fill("UD"), 
+                    count: Array(length_of_aux_array).fill(0), 
+                    current_winner: "UD",
+                    /* Causes a problem in IE as fill is not implemented there */
+                }],
+                status_history: [{
+                    message: "Game start",
+                }],
+                step_number: 0,
+                num_squares_filled: 0,
+                next_player: "F", /* If next player is true, it is the chance of first player */
+                winner: null,
+                win_config: null,
+            };
+        }
     }
 
     jumpTo(step)
     {
-        this.setState({
-            num_squares_filled: step,
-            step_number: step,
-            next_player: ((step % 2) === 0)? "F": "S",
-            board_history: this.state.board_history.slice(0, step + 1),
-            status_history: this.state.status_history.slice(0, step + 1),
-            aux_history: this.state.aux_history.slice(0, step + 1),
-        });
+        if(!this.config.time_opt)
+        {
+            this.setState({
+                num_squares_filled: step,
+                step_number: step,
+                next_player: ((step % 2) === 0)? "F": "S",
+                board_history: this.state.board_history.slice(0, step + 1),
+                status_history: this.state.status_history.slice(0, step + 1),
+            });
+        }
+        else
+        {
+            this.setState({
+                num_squares_filled: step,
+                step_number: step,
+                next_player: ((step % 2) === 0)? "F": "S",
+                board_history: this.state.board_history.slice(0, step + 1),
+                status_history: this.state.status_history.slice(0, step + 1),
+                aux_history: this.state.aux_history.slice(0, step + 1),
+            });
+        }
     }
 
     resetGame()
     {
-        this.setState({
-            board_history: [{
-                squares: Array(this.config.num_rows*this.config.num_cols).fill(null),
-                /* Causes a problem in IE as fill is not implemented there */
-            }],
-            aux_history: [{
-                win: Array(parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2).fill("UD"), 
-                count: Array(parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2).fill(0), 
-                current_winner: "UD",
-                /* Causes a problem in IE as fill is not implemented there */
-            }],
-            status_history: [{
-                message: "Game start",
-            }],
-            step_number: 0,
-            num_squares_filled: 0,
-            next_player: "F",
-            winner: null,
-            win_config: null,
-        });
+        if(!this.config.time_opt)
+        {
+            this.setState({
+                board_history: [{
+                    squares: Array(this.config.num_rows*this.config.num_cols).fill(null),
+                    /* Causes a problem in IE as fill is not implemented there */
+                }],
+                status_history: [{
+                    message: "Game start",
+                }],
+                step_number: 0,
+                num_squares_filled: 0,
+                next_player: "F",
+                winner: null,
+                win_config: null,
+            });
+        }
+        else
+        {
+            this.setState({
+                board_history: [{
+                    squares: Array(this.config.num_rows*this.config.num_cols).fill(null),
+                    /* Causes a problem in IE as fill is not implemented there */
+                }],
+                aux_history: [{
+                    win: Array(parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2).fill("UD"), 
+                    count: Array(parseInt(this.config.num_rows, 10) + parseInt(this.config.num_cols, 10) + 2).fill(0), 
+                    current_winner: "UD",
+                    /* Causes a problem in IE as fill is not implemented there */
+                }],
+                status_history: [{
+                    message: "Game start",
+                }],
+                step_number: 0,
+                num_squares_filled: 0,
+                next_player: "F",
+                winner: null,
+                win_config: null,
+            });
+        }
     }
 
     handleClick(i)
     {
         const board_history = this.state.board_history.slice(0, this.state.step_number + 1);
         const status_history = this.state.status_history.slice(0, this.state.step_number + 1);
-        const aux_history = this.state.aux_history.slice(0, this.state.step_number + 1);
         const current_board_status = board_history[board_history.length - 1];
         const current_squares = current_board_status.squares.slice();
-        const aux_current = aux_history[aux_history.length - 1];
-        const aux_win_current = aux_current.win.slice();
-        const aux_count_current = aux_current.count.slice();
+        let aux_history = null;
+        let aux_current = null;
+        let aux_win_current = null;
+        let aux_count_current = null;
         const current_click_col = Math.floor(parseInt(i, 10)%parseInt(this.config.num_cols, 10) + 1);
         const current_click_row = Math.floor(parseInt(i, 10)/parseInt(this.config.num_cols, 10) + 1);
         // If winner is already declared or the square in the board is unoccupied, do not change the board
@@ -111,31 +165,69 @@ class Game extends React.Component
         {
             return;
         }
-        let current_winner = "UD";
+        let current_possible_winner = "UD";
         current_squares[i] = ((this.state.next_player === "F") ? 
                                 this.config.first_player.choice : this.config.second_player.choice);
-        const winner_info = GeneralBoardNaiveAlgo(current_squares, this.config, "yes");
-        const winner = winner_info[0];
-        const winner_config = winner_info[1];
-        this.setState({
-            board_history: board_history.concat([{
-                squares: current_squares,
-            }]),
-            status_history: status_history.concat([{
-                message: "Move " + parseInt(this.state.step_number + 1, 10) + ": Placed " + 
-                            current_squares[i] + " at (" + current_click_row + ", " + current_click_col + ")",
-            }]),
-            aux_history: aux_history.concat([{
-                win: aux_win_current,
-                count: aux_count_current,
-                current_winner: current_winner,
-            }]),
-            next_player: (this.state.next_player === "F")?"S":"F",
-            num_squares_filled: this.state.num_squares_filled + 1,
-            step_number: board_history.length,
-            winner: winner,
-            win_config: winner_config,
-        });
+        let winner_info = null;
+        let winner = null;
+        let winner_config = null;
+        if(!this.config.time_opt)
+        {
+            winner_info = GeneralBoardNaiveAlgo(current_squares, this.config, "yes");
+            winner = winner_info[0];
+            winner_config = winner_info[1];
+        }
+        else
+        {
+            aux_history = this.state.aux_history.slice(0, this.state.step_number + 1);
+            aux_current = aux_history[aux_history.length - 1];
+            aux_win_current = aux_current.win.slice();
+            aux_count_current = aux_current.count.slice();
+            winner_info = GeneralBoardOptimizedAlgo(current_squares[i], aux_current, aux_win_current, 
+                                                    aux_count_current, this.config.num_rows, this.config.num_cols, 
+                                                    i, "yes");
+            winner = winner_info[0];
+            winner_config = winner_info[1];
+        }
+        if(!this.config.time_opt)
+        {
+            this.setState({
+                board_history: board_history.concat([{
+                    squares: current_squares,
+                }]),
+                status_history: status_history.concat([{
+                    message: "Move " + parseInt(this.state.step_number + 1, 10) + ": Placed " + 
+                                current_squares[i] + " at (" + current_click_row + ", " + current_click_col + ")",
+                }]),
+                next_player: (this.state.next_player === "F")?"S":"F",
+                num_squares_filled: this.state.num_squares_filled + 1,
+                step_number: board_history.length,
+                winner: winner,
+                win_config: winner_config,
+            });
+        }
+        else
+        {
+            this.setState({
+                board_history: board_history.concat([{
+                    squares: current_squares,
+                }]),
+                status_history: status_history.concat([{
+                    message: "Move " + parseInt(this.state.step_number + 1, 10) + ": Placed " + 
+                                current_squares[i] + " at (" + current_click_row + ", " + current_click_col + ")",
+                }]),
+                aux_history: aux_history.concat([{
+                    win: aux_win_current,
+                    count: aux_count_current,
+                    current_winner: current_possible_winner,
+                }]),
+                next_player: (this.state.next_player === "F")?"S":"F",
+                num_squares_filled: this.state.num_squares_filled + 1,
+                step_number: board_history.length,
+                winner: winner,
+                win_config: winner_config,
+            });
+        }
     }
 
     handleData(num_rows, num_cols, first_player, second_player, first_player_level, second_player_level)
