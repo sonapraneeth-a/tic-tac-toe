@@ -1,0 +1,19 @@
+.game-info
+{
+    overflow-y: auto;
+    flex-grow: 1;
+    text-align: left;
+    @include until($tablet)
+    {
+        margin-top: 1rem;
+    }
+    @include from($tablet)
+    {
+        margin-left: 1rem;
+    }
+    @if $mode == debug
+    {
+        border: 0.05px solid black;
+    }
+    padding: 1rem;
+}
