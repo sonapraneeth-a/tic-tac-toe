@@ -141,6 +141,7 @@ ol, ul {
       flex-direction: column; } }
   @media screen and (min-width: 55.8rem) {
     .game-box {
+      max-height: 30rem;
       flex-direction: row; } }
 
 .game-board {
@@ -150,18 +151,6 @@ ol, ul {
   justify-content: center;
   border: 0.05px solid black;
   padding: 1rem; }
-
-.game-info {
-  flex-grow: 1;
-  text-align: left;
-  border: 0.05px solid black;
-  padding: 1rem; }
-  @media screen and (max-width: 55.8rem) {
-    .game-info {
-      margin-top: 1rem; } }
-  @media screen and (min-width: 55.8rem) {
-    .game-info {
-      margin-left: 1rem; } }
 
 input[type=number] {
   line-height: 1.2rem;
@@ -188,10 +177,10 @@ input[type=submit] {
       flex-direction: row; } }
 
 .game-form-item {
-  margin: 0 1rem; }
+  margin: 0 1rem;
+  justify-content: center; }
   .game-form-item.submit {
     line-height: 1.2rem;
-    align-content: center;
     margin: auto 0;
     text-align: center; }
   .game-form-item:nth-child(1) {
@@ -221,6 +210,27 @@ input[type=submit] {
   margin: 0rem 1rem;
   border: 0.05rem solid black;
   cursor: pointer; }
+
+.game-info {
+  overflow-y: auto;
+  flex-grow: 1;
+  text-align: left;
+  border: 0.05px solid black;
+  padding: 1rem; }
+  @media screen and (max-width: 55.8rem) {
+    .game-info {
+      margin-top: 1rem; } }
+  @media screen and (min-width: 55.8rem) {
+    .game-info {
+      margin-left: 1rem; } }
+
+.game-move-item {
+  cursor: pointer;
+  color: black;
+  background-color: white; }
+  .game-move-item:hover {
+    color: white;
+    background-color: black; }
 
 .game-players {
   display: flex;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/css/index.css';
 import registerServiceWorker from './registerServiceWorker';
-import Game from './Game';
+import Game from './BoardOneD/Game';
 
 
 ReactDOM.render (

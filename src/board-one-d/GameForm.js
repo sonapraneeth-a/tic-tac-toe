@@ -131,7 +131,6 @@ class GameForm extends React.Component
                             <select value={this.state.player_one} onChange={this.handleFirstPlayer}>
                                 <option value="human">Human</option>
                                 <option value="ai-easy">AI - Easy</option>
-                                <option value="ai-difficult">AI - Difficult</option>
                             </select>
                             <select value={this.state.player_choice} 
                                     onChange={this.handlePlayerChoice}>
@@ -144,7 +143,6 @@ class GameForm extends React.Component
                             <select value={this.state.player_two} onChange={this.handleSecondPlayer}>
                                 <option value="human">Human</option>
                                 <option value="ai-easy">AI - Easy</option>
-                                <option value="ai-difficult">AI - Difficult</option>
                             </select>
                         </div>
                     </div>

@@ -1,13 +1,11 @@
 import React from "react";
-import "./styles/css/index.css";
+import "../styles/css/index.css";
 import Board from "./Board";
 import GameForm from "./GameForm";
 import GameInfo from "./GameInfo";
 import {GeneralBoardNaiveAlgo} from "./GeneralizedNaiveAlgo";
 import {GeneralBoardOptimizedAlgo} from "./GeneralizedOptimalAlgo";
 import {AIMove} from "./AIPlayer";
-
-const pointer = { cursor: "pointer" };
 
 const version = {
     fontSize: "1rem",
@@ -297,7 +295,7 @@ class Game extends React.Component
         {
             const desc = status_history[move].message;
             return (
-                <p key={"step" + move} style={pointer} onClick={() => this.jumpTo(move)}>{desc}</p>
+                <p key={"step" + move} className="game-move-item" onClick={() => this.jumpTo(move)}>{desc}</p>
             );
         });
 

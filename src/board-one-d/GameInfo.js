@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/css/index.css';
+import '../styles/css/index.css';
 
 const game_status = {
     fontWeight: 'bold'
