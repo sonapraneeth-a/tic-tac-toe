@@ -10,7 +10,6 @@ export function GeneralBoardOptimizedAlgo(current_player, aux_current, aux_win_c
     let number_of_cols = parseInt(num_cols, 10);
     const win_row = Math.floor(parseInt(clicked_button, 10)/number_of_rows);
     const win_col = number_of_rows + Math.floor(parseInt(clicked_button, 10)%number_of_cols);
-    console.log(number_of_rows + " , " + win_row + ", " + win_col);
     if(aux_win_current[win_row] === "UD")
     {
         aux_win_current[win_row] = current_player;
@@ -142,10 +141,5 @@ export function GeneralBoardOptimizedAlgo(current_player, aux_current, aux_win_c
             }
         }
     }
-    console.log(actual_winner);
-    console.log(actual_winner_config);
-    console.log(aux_win_current);
-    console.log(aux_count_current);
-    console.log(current_possible_winner);
     return [actual_winner, actual_winner_config, aux_win_current, aux_count_current, current_possible_winner];
 }
