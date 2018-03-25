@@ -151,7 +151,9 @@ class Game extends React.Component
 
     componentDidUpdate()
     {
-        if (this.state.winner)
+        const is_board_filled = IsBoardFilled(this.state.num_squares_filled, 
+                                    this.state.board_history[this.state.board_history.length - 1].squares.length);
+        if (this.state.winner || is_board_filled)
         {
             return;
         }
@@ -159,16 +161,15 @@ class Game extends React.Component
                             this.config.first_player.name : this.config.second_player.name);
         if(player_name === "ai")
         {
-            let player_level = ((this.state.next_player === "F") ? 
-                                this.config.first_player.level : this.config.second_player.level);
-            let current_player = ((this.state.next_player === "F") ? 
-                                this.config.first_player.choice : this.config.second_player.choice);
-            let current_board = this.state.board_history[this.state.board_history.length-1].squares;
-            var move = AIMove(current_player, current_board, player_level);
-            /*setTimeout(() => {
-                move = AIMove(current_player, current_board, player_level);
-            }, 100);*/
-            this.updateBoard(move);
+            setTimeout(() => {
+                let player_level = ((this.state.next_player === "F") ? 
+                                    this.config.first_player.level : this.config.second_player.level);
+                let current_player = ((this.state.next_player === "F") ? 
+                                    this.config.first_player.choice : this.config.second_player.choice);
+                let current_board = this.state.board_history[this.state.board_history.length-1].squares;
+                var move = AIMove(current_player, current_board, player_level);
+                this.updateBoard(move);
+            }, 1000);
         }
     }
 
@@ -259,6 +260,9 @@ class Game extends React.Component
         let player_name = ((this.state.next_player === "F") ? 
                             this.config.first_player.name : this.config.second_player.name);
         if(player_name === "ai") { return; }
+        const is_board_filled = IsBoardFilled(this.state.num_squares_filled, 
+            this.state.board_history[this.state.board_history.length - 1].squares.length);
+        if(is_board_filled) {return;}
         this.updateBoard(i);
     }
 
