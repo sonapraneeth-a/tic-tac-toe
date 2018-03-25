@@ -5,6 +5,7 @@ import GameForm from "./GameForm";
 import GameInfo from "./GameInfo";
 import {GeneralBoardNaiveAlgo} from "./GeneralizedNaiveAlgo";
 import {GeneralBoardOptimizedAlgo} from "./GeneralizedOptimalAlgo";
+import {AIMove} from "./AIPlayer";
 
 const pointer = { cursor: "pointer" };
 
@@ -148,7 +149,30 @@ class Game extends React.Component
         }
     }
 
-    handleClick(i)
+    componentDidUpdate()
+    {
+        if (this.state.winner)
+        {
+            return;
+        }
+        let player_name = ((this.state.next_player === "F") ? 
+                            this.config.first_player.name : this.config.second_player.name);
+        if(player_name === "ai")
+        {
+            let player_level = ((this.state.next_player === "F") ? 
+                                this.config.first_player.level : this.config.second_player.level);
+            let current_player = ((this.state.next_player === "F") ? 
+                                this.config.first_player.choice : this.config.second_player.choice);
+            let current_board = this.state.board_history[this.state.board_history.length-1].squares;
+            var move = AIMove(current_player, current_board, player_level);
+            /*setTimeout(() => {
+                move = AIMove(current_player, current_board, player_level);
+            }, 100);*/
+            this.updateBoard(move);
+        }
+    }
+
+    updateBoard(i)
     {
         const board_history = this.state.board_history.slice(0, this.state.step_number + 1);
         const status_history = this.state.status_history.slice(0, this.state.step_number + 1);
@@ -230,6 +254,14 @@ class Game extends React.Component
         }
     }
 
+    handleClick(i)
+    {
+        let player_name = ((this.state.next_player === "F") ? 
+                            this.config.first_player.name : this.config.second_player.name);
+        if(player_name === "ai") { return; }
+        this.updateBoard(i);
+    }
+
     handleData(num_rows, num_cols, first_player, second_player, first_player_level, second_player_level)
     {
         /*console.log("(Parent) Rows: " + num_rows);
@@ -244,7 +276,6 @@ class Game extends React.Component
 
     handleReset()
     {
-        console.log("Handle reset");
         this.resetGame();
     }
 
