@@ -91,6 +91,8 @@ body {
   width: 3rem; }
   .square:focus {
     outline: none; }
+  .square:hover {
+    cursor: pointer; }
 
 .kbdnavigation .square:focus {
   background: #ddd; }

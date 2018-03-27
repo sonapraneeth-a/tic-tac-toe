@@ -17,6 +17,10 @@
     {
         outline: none;
     }
+    &:hover
+    {
+        cursor: pointer;
+    }
 }
 
 .kbdnavigation .square:focus
