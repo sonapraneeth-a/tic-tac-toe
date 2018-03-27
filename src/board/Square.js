@@ -13,7 +13,7 @@ class Square extends React.Component
     {
       return (
         <button className="square">
-            {this.props.value}
+            ({this.props.rowIndex}, {this.props.colIndex})
         </button>
       );
     }
