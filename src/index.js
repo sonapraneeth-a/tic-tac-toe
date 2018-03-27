@@ -2,15 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/css/index.css';
 import registerServiceWorker from './registerServiceWorker';
-import Game from './BoardOneD/Game';
+import Game from './board/Game';
 
 
 ReactDOM.render (
     <Game
         title="Tic Tac Toe"
-        version="v0.8.2"
+        version="v0.1.0"
+        debug="yes"
     />,
-    document.getElementById('app')
+    document.getElementById("app")
 );
 
 registerServiceWorker();
