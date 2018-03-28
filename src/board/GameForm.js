@@ -78,7 +78,6 @@ class GameForm extends React.Component
      */
     handleFirstPlayerChoice(event)
     {
-        console.log(event.target.checked);
         let firstPlayerChoice = (event.target.checked === true)? "X" : "O";
         let secondPlayerChoice = (firstPlayerChoice === "X")? "O" : "X";
         this.setState({
@@ -104,7 +103,6 @@ class GameForm extends React.Component
      */
     handleSecondPlayerChoice(event)
     {
-        console.log(event.target.checked);
         let secondPlayerChoice = (event.target.checked === true)? "X" : "O";
         let firstPlayerChoice = (secondPlayerChoice === "X")? "O" : "X";
         this.setState({
@@ -172,10 +170,6 @@ class GameForm extends React.Component
         /*console.log('(Child) Number of rows in the board: ' + this.state.numRows);
         console.log('(Child) Number of cols in the board: ' + this.state.numCols);*/
         event.preventDefault();
-        console.log(this.state.numRows);
-        console.log(this.state.numCols);
-        console.log(this.state.firstPlayer);
-        console.log(this.state.secondPlayer);
         // Call game handle sent from Game component
         this.props.handleFromGame(this.state.numRows, this.state.numCols, 
                                     this.state.firstPlayer, this.state.secondPlayer);
