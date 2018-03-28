@@ -1,7 +1,8 @@
 import React from "react";
 import Board from "./Board";
 import GameForm from "./GameForm";
-import CalculateWinner from "./DecideWinner";
+import {CalculateWinner} from "./DecideWinner";
+import {AIMove} from "./AIPlayer";
 import "../styles/css/index.css";
 
 /**
@@ -126,6 +127,33 @@ class Game extends React.Component
             winner: null,
             winnerConfig: null,
         });
+    }
+
+    /**
+     * 
+     */
+    componentDidUpdate()
+    {
+        const isBoardFilled = (this.state.numSquaresFilled ===
+                                (this.config.numRows * this.config.numCols));
+        if (this.state.winner || isBoardFilled)
+        {
+            return;
+        }
+        let playerName = ((this.state.nextPlayer === "F") ? 
+                            this.config.firstPlayer.name : this.config.secondPlayer.name);
+        if(playerName === "ai")
+        {
+            setTimeout(() => {
+                let PlayerLevel = ((this.state.nextPlayer === "F") ? 
+                                    this.config.firstPlayer.level : this.config.secondPlayer.level);
+                let current_player = ((this.state.nextPlayer === "F") ? 
+                                    this.config.firstPlayer.choice : this.config.secondPlayer.choice);
+                let current_board = this.state.boardHistory[this.state.boardHistory.length-1].squares;
+                var move = AIMove(current_player, current_board, PlayerLevel);
+                this.updateBoard(move[0], move[1]);
+            }, 1000);
+        }
     }
 
     /**
