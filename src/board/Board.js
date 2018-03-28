@@ -17,6 +17,7 @@ class Board extends React.Component
         return <Square 
                     rowIndex={rowIndex}                    // Row in which the Square is present
                     colIndex={colIndex}                    // Column in which the Square is present
+                    value={null}
                     key={"row-"+rowIndex+"-col-"+colIndex} // Key for the Square component
                 />;
     }

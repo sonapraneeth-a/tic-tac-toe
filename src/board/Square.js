@@ -1,5 +1,5 @@
-import React from 'react';
-import '../styles/css/index.css';
+import React from "react";
+import "../styles/css/index.css";
 
 /**
  * @brief Square component of the board
@@ -13,7 +13,7 @@ class Square extends React.Component
     {
       return (
         <button className="square">
-            ({this.props.rowIndex}, {this.props.colIndex})
+            {this.props.value}
         </button>
       );
     }
