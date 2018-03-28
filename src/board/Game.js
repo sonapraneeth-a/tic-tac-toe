@@ -39,8 +39,9 @@ class Game extends React.Component
         // Current state of the game
         this.state = {
             boardHistory: [{
-                squares: Array(this.config.numRows).fill(Array(this.config.numCols).fill(null)), 
-                /* Causes a problem in IE as fill is not implemented there */
+                squares: this.createEmptyBoard(this.config.numRows, this.config.numCols),
+                // Removed polyfill as there was an array problem.
+                // See: https://stackoverflow.com/questions/9979560/javascript-multidimensional-array-updating-specific-element?rq=1
             }],                 // History of moves on the board
             statusHistory: [{
                 message: "Game start",
@@ -51,6 +52,26 @@ class Game extends React.Component
             winner: null,        // Who is the winner?
             winnerConfig: null,  // Which squares determine the winner?
         };
+    }
+
+    /**
+     * @brief - Creates an empty 2D array
+     * @param {*} numRows - Number of rows required for the board
+     * @param {*} numCols - Number of columns required for the board
+     */
+    createEmptyBoard(numRows, numCols)
+    {
+        var board = new Array(numRows);
+        for (let rowIndex = 0; rowIndex < numRows; rowIndex++)
+        {
+            board[rowIndex] = new Array(numCols);
+            // Creating a board row
+            for (let colIndex = 0; colIndex < numCols; colIndex++)
+            {
+                board[rowIndex][colIndex] = null;
+            }
+        }
+        return board;
     }
 
     /**
@@ -91,8 +112,9 @@ class Game extends React.Component
         // of the board
         this.setState({
             boardHistory: [{
-                squares: Array(this.config.numRows).fill(Array(this.config.numCols).fill(null)), 
-                /* Causes a problem in IE as fill is not implemented there */
+                squares: this.createEmptyBoard(this.config.numRows, this.config.numCols),
+                // Removed polyfill as there was an array problem.
+                // See: https://stackoverflow.com/questions/9979560/javascript-multidimensional-array-updating-specific-element?rq=1
             }],
             statusHistory: [{
                 message: "Game start",
@@ -106,10 +128,64 @@ class Game extends React.Component
     }
 
     /**
+     * 
+     * @param {*} rowIndex 
+     * @param {*} colIndex 
+     */
+    updateBoard(rowIndex, colIndex)
+    {
+        const boardHistory = this.state.boardHistory.slice(0, this.state.stepNumber + 1);
+        const statusHistory = this.state.statusHistory.slice(0, this.state.stepNumber + 1);
+        const currentBoard = boardHistory[boardHistory.length - 1];
+        const currentSquares = currentBoard.squares.slice();
+        // If winner is already declared or the square in the board is unoccupied, do not change the board
+        if (this.state.winner || currentSquares[rowIndex][colIndex])
+        {
+            return;
+        }
+        currentSquares[rowIndex][colIndex] = ((this.state.nextPlayer === "F") ? 
+                                                this.config.firstPlayer.choice : 
+                                                this.config.secondPlayer.choice);
+        let winner = null;
+        let winnerConfig = null;
+        this.setState({
+            boardHistory: boardHistory.concat([{
+                squares: currentSquares,
+            }]),
+            statusHistory: statusHistory.concat([{
+                message: "Move " + parseInt(this.state.stepNumber + 1, 10) + ": Placed " + 
+                            currentSquares[rowIndex][colIndex] + " at (" + rowIndex + ", " + colIndex + ")",
+            }]),
+            nextPlayer: (this.state.nextPlayer === "F")?"S":"F",
+            numSquaresFilled: this.state.numSquaresFilled + 1,
+            stepNumber: boardHistory.length,
+            winner: winner,
+            winnerConfig: winnerConfig,
+        });
+    }
+
+    /**
+     * 
+     * @param {*} rowIndex 
+     * @param {*} colIndex 
+     */
+    handleClick(rowIndex, colIndex)
+    {
+        let playerName = ((this.state.nextPlayer === "F") ? 
+                            this.config.firstPlayer.name : this.config.secondPlayer.name);
+        if(playerName === "ai") { return; }
+        const isBoardFilled = (this.state.numSquaresFilled ===
+                                (this.config.numRows*this.config.numCols));
+        if(isBoardFilled) {return;}
+        this.updateBoard(rowIndex, colIndex);
+    }
+
+    /**
      * @brief - Determines how all the components of the board should be rendered
      */
     render()
     {
+        const currentBoard= this.state.boardHistory[this.state.boardHistory.length-1];
         return (
             <div className="game">
                 {/* Title and version of the game */}
@@ -125,6 +201,8 @@ class Game extends React.Component
                         <Board 
                             numRows={this.config.numRows}
                             numCols={this.config.numCols}
+                            squares={currentBoard.squares}
+                            onClick={(rowIndex, colIndex) => this.handleClick(rowIndex, colIndex)}
                         />
                         <GameForm 
                             handleFromGame={this.handleFromGameInfo}
