@@ -224,7 +224,7 @@ class Game extends React.Component
         let status = null;
         if(this.state.winner)
         {
-            status = "Winner";
+            status = "Winner: " + this.state.winner;
         }
         else if(isBoardFilled === true)
         {
