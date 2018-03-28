@@ -66,8 +66,7 @@ class Board extends React.Component
      */
     render()
     {
-        const status = "Next player: X"; // Status of the game
-        const statusDiv =  <div className="status">{status}</div>; // Status div component
+        const statusDiv =  <div className="status">{this.props.status}</div>; // Status div component
         const board = this.renderBoard(this.props.numRows, this.props.numCols); // Rendered board
         return (
             <div>

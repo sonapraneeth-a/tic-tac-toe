@@ -1,6 +1,7 @@
 import React from "react";
 import Board from "./Board";
 import GameForm from "./GameForm";
+import CalculateWinner from "./DecideWinner";
 import "../styles/css/index.css";
 
 /**
@@ -146,8 +147,12 @@ class Game extends React.Component
         currentSquares[rowIndex][colIndex] = ((this.state.nextPlayer === "F") ? 
                                                 this.config.firstPlayer.choice : 
                                                 this.config.secondPlayer.choice);
+        let winnerInfo = null;
         let winner = null;
         let winnerConfig = null;
+        winnerInfo = CalculateWinner(currentSquares);
+        winner = winnerInfo[0];
+        winnerConfig = winnerInfo[1];
         this.setState({
             boardHistory: boardHistory.concat([{
                 squares: currentSquares,
@@ -186,6 +191,17 @@ class Game extends React.Component
     render()
     {
         const currentBoard= this.state.boardHistory[this.state.boardHistory.length-1];
+        let status = null;
+        if(this.state.winner)
+        {
+            status = "Winner";
+        }
+        else
+        {
+            status = "Next player: " + ((this.state.nextPlayer === "F") ? 
+                                        this.config.firstPlayer.choice : 
+                                        this.config.secondPlayer.choice);
+        }
         return (
             <div className="game">
                 {/* Title and version of the game */}
@@ -202,6 +218,7 @@ class Game extends React.Component
                             numRows={this.config.numRows}
                             numCols={this.config.numCols}
                             squares={currentBoard.squares}
+                            status={status}
                             onClick={(rowIndex, colIndex) => this.handleClick(rowIndex, colIndex)}
                         />
                         <GameForm 
