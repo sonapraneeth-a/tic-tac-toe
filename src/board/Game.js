@@ -191,10 +191,16 @@ class Game extends React.Component
     render()
     {
         const currentBoard= this.state.boardHistory[this.state.boardHistory.length-1];
+        const isBoardFilled = (this.state.numSquaresFilled ===
+                                    (this.config.numRows * this.config.numCols));
         let status = null;
         if(this.state.winner)
         {
             status = "Winner";
+        }
+        else if(isBoardFilled === true)
+        {
+            status = "Game draw";
         }
         else
         {
