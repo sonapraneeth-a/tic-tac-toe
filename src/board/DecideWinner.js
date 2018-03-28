@@ -1,4 +1,4 @@
-export default function CalculateWinner(squares)
+export function CalculateWinner(squares)
 {
     let solution = null;
     solution = checkRows(squares);
@@ -56,7 +56,7 @@ function checkCols(squares)
     let winnerConfig = null;
     for(let colIndex = 0; colIndex < numCols; colIndex++)
     {
-        let character = squares[colIndex][0];
+        let character = squares[0][colIndex];
         let winnerFound = true;
         for(let rowIndex = 0; rowIndex < numRows; rowIndex++)
         {
@@ -72,7 +72,7 @@ function checkCols(squares)
         if(winnerFound)
         {
             winnerConfig = [];
-            winner = squares[colIndex][0];
+            winner = squares[0][colIndex];
             for(let rowIndex = 0; rowIndex < numRows; rowIndex++)
             {
                 winnerConfig.push([rowIndex,colIndex]);
